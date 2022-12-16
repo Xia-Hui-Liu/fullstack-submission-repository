@@ -1,14 +1,14 @@
 import React,{useState} from "react"
 
-const Header = (props) => {
+const Header = ({title}) => {
   return (
-    <h1>{props.title}</h1>
+    <h1>{title}</h1>
   )
 }
 
 const Button = (props) => {
   return (
-    <button onClick={props.onClick}>{props.text}</button>
+        <button onClick={props.onClick}>{props.text}</button>
   )
 }
 
@@ -44,16 +44,18 @@ const StatisticLine = (props) => {
       </table>
   )
 }
-const Statistics = (props) => {
-  if(props.allClicks===0){
+const Statistics = ({allClicks, text, clicks}) => {
+  if(allClicks===0){
     return <p>No feedback given</p>
   }
   return(
-     <StatisticLine text = {props.text} clicks={props.clicks} /> 
+     <StatisticLine text = {text} clicks={clicks} /> 
 )
 }
 
 const App = () => {
+  const title = ['give feedback', 'Stastistics' ]
+
   const [clicks, setClicks]=useState({
     good:0,
     neutral:0,
@@ -91,13 +93,13 @@ const App = () => {
   return (
     <>
     <div>
-      <Header title = 'give feedback' />
+      <Header title = {title[0]} />
       <Button onClick={handleGoodClick} text='good' />
       <Button onClick={handleNeutralClick} text='neutral' />
       <Button onClick={handleBadClick} text='bad' />
     </div>
     <div>
-      <Header title = 'Stastistics' />
+      <Header title={title[1]} />
       <Statistics allClicks={allClicks} clicks={clicks} />
     </div>
     </>
