@@ -22,8 +22,8 @@ useEffect(() => {
     })
 }, [])
 
-  const addName = (event) => {
-    event.preventDefault();
+  const addName = (e) => {
+    e.preventDefault();
     const personObject = {
         name: newName,
         number: newNumber,
@@ -34,16 +34,16 @@ useEffect(() => {
     setPersons(persons.concat(personObject))
   };
  
-  const handleName = (event) => {
+  const handleName = (e) => {
         persons
         .map(n=>n.name)
-        .includes(event.target.value)
-        ? alert(`${event.target.value} is already added to phonebook`)
-        : setNewName(event.target.value);
+        .includes(e.target.value)
+        ? alert(`${e.target.value} is already added to phonebook`)
+        : setNewName(e.target.value);
   }
 
-  const handleNumber = (event) => {
-    setNumber(event.target.value)
+  const handleNumber = (e) => {
+    setNumber(e.target.value)
   }
 
   const handleSearch = (e) => {
