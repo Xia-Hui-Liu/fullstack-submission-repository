@@ -1,98 +1,70 @@
-import { useState} from 'react'
-
-
-const Filter = ({search, handleSearch}) => {
-  return(
-    <div>
-        filter shown with <input type='search' name='filter' value={search} onChange={handleSearch} />
-    </div>
-  )
-}
-
-const PersonForm = ({addName, newName,newNumber, handleNameChange, handleNumberChange}) => {
-return(
-    <>
-     <form onSubmit={addName}>
-        <div>
-          name: <input type='text' name='name' required value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input type='tel' name='phone' placeholder='39-44-5323523'required value={newNumber} onChange={handleNumberChange} /> 
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-    </>
-)
-}
-
-const Persons =({persons,search}) => {
-   return(
-    <div>
-        {(search.query ? search.list.map((person, i) => {
-            return <p key={i}>{person.name} {person.number}</p>
-        }) : persons.map((person, i) => { return <p key={i}>{person.name} {person.number}</p>}))
-       }
-      </div>
-   )
-
-}
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Filter from './components/Filter';
+import PersonForm from './components/PersonForm';
+import Persons from './components/Persons';
 
 const App = () => {
-  const [persons, setPersons] = useState(
-    [
-        { name: 'Arto Hellas', number: '040-123456', id: 1 },
-        { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-        { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-        { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-      ]
-  ) 
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNumber] = useState('');
   const [search, setSearch] = useState({
     query: '',
-    list: [ ]
-  });
+    list: []
+  })
+  
+useEffect(() => {
+    axios
+    .get('http://localhost:4000/persons')
+    .then(response => {
+        console.log(response.data)
+        setPersons(response.data)
+    })
+}, [])
 
   const addName = (event) => {
     event.preventDefault();
-    setNewName('')
-    setNumber('')
-    setPersons([...persons, {name:newName, number:newNumber}])
+    const personObject = {
+        name: newName,
+        number: newNumber,
+        id: persons.length + 1
+    };
+    setNewName('');
+    setNumber('');
+    setPersons(persons.concat(personObject))
   };
  
-  const handleNameChange = (event) => {
-    if([...persons].map(n=>n.name).includes(event.target.value)){
-        alert(`${event.target.value} is already added to phonebook`)
-    } else {
-    setNewName(event.target.value);
-    setPersons([...persons, {name:newName}])
+  const handleName = (event) => {
+        persons
+        .map(n=>n.name)
+        .includes(event.target.value)
+        ? alert(`${event.target.value} is already added to phonebook`)
+        : setNewName(event.target.value);
   }
-}
 
-const handleNumberChange = (event) => {  
-    setNumber(event.target.value);
-    setPersons([...persons, {number:newNumber}])
-}
-const handleSearch = (event) => {
-    const filter = persons.filter(person => {
-        if(event.target.value === '') return persons
-        return (person.name.toLowerCase()).includes((event.target.value).toLowerCase())
+  const handleNumber = (event) => {
+    setNumber(event.target.value)
+  }
+
+  const handleSearch = (e) => {
+    const results = persons.filter(person => {
+        if(e.target.value === "") return persons
+         return person.name.toLowerCase().includes(e.target.value.toLowerCase())
     })
     setSearch({
-        query: event.target.value,
-        list: filter
+        query: e.target.value,
+        list: results
     })
-}
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter search={search.query} handleSearch={handleSearch} />
+      <Filter search={search} handleSearch={handleSearch} />
       <h3>Add a new</h3>
-      <PersonForm addName={addName} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
+      <PersonForm addName={addName} newName={newName} handleName={handleName} newNumber={newNumber} handleNumber={handleNumber} />
       <h3>Numbers</h3>
-      <Persons persons={persons}  search={search}  />
+      <Persons search={search} newName={newName} persons={persons} />
     </div>
   )
 }
