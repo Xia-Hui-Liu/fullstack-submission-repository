@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 import Filter from './components/Filter';
@@ -36,14 +35,7 @@ const App = () => {
         name: newName,
         number: newNumber,
     };
-  //   const name = persons.map(n => n.name.toString().toLowerCase());
-  //   const person = persons.find(n => n.id === id);
-  //  if (name === newName) {
-  //    axios.put(`http://localhost:4000/persons/5`, {
-  //       name: name,
-  //       number: newNumber, 
-  //       id: id
-  //     })}
+ 
       
     personService
       .create(personObject)
@@ -53,18 +45,7 @@ const App = () => {
         setNumber('')
         setMessage(`Added ${newName}`)
       }).catch((error) => setError(error.response))
-   
-      // personService
-      //    .update(id, changedPerson)
-      //    .then(returnedPerson => {
-      //     const person = persons.find(n => n.id === id);
-      //      setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
-      //    })
-      //    .catch(error => {
-      //      setError(
-      //        error.message
-      //      )
-      //    })
+  
 
       setTimeout(() => {
         setMessage(null)
@@ -94,22 +75,6 @@ const App = () => {
         list: results
     })
   }
-
-  // const updatePerson = (id) => {
-  //  const person = persons.find(n => n.id === id);
-  //  const changedPerson = { ...person, number: !person.number};
-
-  //  personService
-  //     .update(id, changedPerson)
-  //     .then(returnedPerson => {
-  //       setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
-  //     })
-  //     .catch(error => {
-  //       setError(
-  //         error.message
-  //       )
-  //     })
-  // }
 
   const deletePerson = (id) => {
     const newPersons = persons.filter((person) => {
