@@ -29,7 +29,7 @@ const App = () => {
       })
   }, [])
 
-  const addName = (e, id) => {
+  const addName = (e) => {
     e.preventDefault();
     const personObject = {
         name: newName,
@@ -54,11 +54,12 @@ const App = () => {
 
   const handleName = (e) => {
     const input = e.target.value;
-    const name = persons.map(n => n.name.toString().toLowerCase());
-    name
-    .includes(input.toLowerCase())
-    ? alert(`${input} is already added to phonebook, replacethe old number with a new one?`) 
-    :setNewName(input) 
+    const name = persons
+                 .map(n => n.name.toString().toLowerCase());
+          name
+          .includes(input.toLowerCase())
+          ? alert(`${input} is already added to phonebook, replace the old number with a new one?`) 
+          :setNewName(input) 
   }
 
   const handleNumber = (e) => {
@@ -66,9 +67,10 @@ const App = () => {
   }
 
   const handleSearch = (e) => {
-    const results = persons.filter(person => {
-        if(e.target.value === "") return persons
-         return person.name.toLowerCase().includes(e.target.value.toLowerCase())
+    const results = persons
+                    .filter(person => {
+                        if(e.target.value === "") return persons
+                        return person.name.toLowerCase().includes(e.target.value.toLowerCase())
     })
     setSearch({
         query: e.target.value,

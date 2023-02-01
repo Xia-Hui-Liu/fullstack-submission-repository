@@ -5,8 +5,16 @@ const Persons = ({search, newName, persons, deletePerson}) => {
     : persons
     return(
         <div>
-        {personsToShow.map(person => <p key={person.id}>{person.name} {person.number}<button type="button" key={person.id} onClick={() => {
-            if(window.confirm(`Delete ${person.name}?`)) return deletePerson(person.id)}}>delete</button></p>)} 
+            {
+            personsToShow
+            .map(person => 
+            <p key={person.id}>
+                {person.name} {person.number}
+                <button type="button" onClick={() => {if(window.confirm(`Delete ${person.name}?`)) return deletePerson(person.id)}}>
+                 delete
+                </button>
+            </p>)
+            } 
         </div>
     )
 }
